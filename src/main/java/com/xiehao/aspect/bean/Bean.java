@@ -8,6 +8,24 @@ public class Bean {
     private String className;
     private Object target;
 
+    public Bean(Object o,String name){
+        /**
+         * 默认bean名称为类名首字母小写
+         */
+        if(name ==null ||"".equals(name)){
+            //变换第一个字母为小写
+            name = o.getClass().getSimpleName();
+            String nameFirstChar = name .substring(0,1);
+            String nameTalChar = name .substring(1);
+            name = nameFirstChar.toLowerCase()+nameTalChar;
+        }
+        this.name = name;
+        this.className = o.getClass().getName();
+        this.target = o;
+
+    }
+    public Bean(){
+    }
     public String getName() {
         return name;
     }
@@ -24,8 +42,8 @@ public class Bean {
         this.className = className;
     }
 
-    public Object getTarget() {
-        return target;
+    public <T> T getTarget() {
+        return (T)target;
     }
 
     public void setTarget(Object target) {
