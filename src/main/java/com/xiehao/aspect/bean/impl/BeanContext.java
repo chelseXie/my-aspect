@@ -5,6 +5,7 @@ import com.xiehao.aspect.bean.Context;
 import com.xiehao.aspect.bean.LifeCycleBase;
 import com.xiehao.aspect.exception.BeanDuplicationException;
 import com.xiehao.aspect.exception.BeanNotFoundException;
+import com.xiehao.aspect.exception.LifecycleException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -96,4 +97,8 @@ public class BeanContext extends LifeCycleBase implements Context {
         elementList.removeIf((Bean bean)->bean.getName().equals(name));
     }
 
+    @Override
+    protected void initInternal() throws LifecycleException {
+
+    }
 }

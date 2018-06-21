@@ -4,46 +4,55 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by next on 2018/6/20.
  */
 public class DefaultInvocationHandler implements InvocationHandler {
-    private static  String BEFORE = "before";
-    private static  String AFTER = "after";
-    private static  String AFTERRETURNING = "afterReturning";
-    private static  String AROUND = "around";
-
+    private static  String BEFORE = "Before";
+    private static  String AFTER = "After";
+    private static  String AFTERRETURNING = "AfterReturning";
+    private static  String AROUND = "Around";
 
     private Object target;
     private Object wovenObject;
-    private String method;
-    private String advice;
+    //要织入的方法
+    private Map<String,String> wovenMethods;
+    //目标对象符合织入条件的方法
+    private List<String> targetMethods;
 
-    public Object getInstance(Object target,Object wovenObject,String method){
+    public Object getInstance(Object target,Object wovenObject,Map wovenMethods,List<String> targetMethods){
         this.target = target;
         this.wovenObject = wovenObject;
-        this.method = method;
+        this.wovenMethods = wovenMethods;
+        this.targetMethods = targetMethods;
         Class clazz = target.getClass();
         Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
         return obj;
     }
-    @Override
     public Object  invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if(BEFORE.equals(this.advice)||AROUND.equals(this.advice)){
-            methodHandler();
+        //before执行
+        if(targetMethods.contains(method.getName())){
+            if(wovenMethods.containsKey(BEFORE)){
+                methodHandler(wovenMethods.get(BEFORE));
+            }
         }
         // 执行目标对象的方法
         Object result = method.invoke(target, args);
-        if(AFTER.equals(this.advice)||AROUND.equals(this.advice)){
-            methodHandler();
+        //After执行
+        if(targetMethods.contains(method.getName())){
+            if(wovenMethods.containsKey(AFTER)){
+                methodHandler(wovenMethods.get(AFTER));
+            }
         }
         return result;
     }
-    public void methodHandler() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void methodHandler(String method) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if(wovenObject != null){
             Class class0 = wovenObject.getClass();
-            Method method0 = class0.getMethod(this.method);
+            Method method0 = class0.getMethod(method);
             method0.invoke(wovenObject);
         }
     }
