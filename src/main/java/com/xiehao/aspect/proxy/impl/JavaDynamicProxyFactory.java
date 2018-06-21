@@ -19,9 +19,10 @@ public class JavaDynamicProxyFactory implements ProxyFactory{
 
     @Override
     public <T> T getProxyBean(T oject) {
-        if()
+
         invocationHandler.getInstance(oject,)
-        Class<?> stuProxyClass = Proxy.getProxyClass(oject.getClass().getClassLoader(), new Class<?>[]{oject.getClass()});
+        T subject = (T)Proxy.newProxyInstance(invocationHandler.getClass().getClassLoader(), oject
+                .getClass().getInterfaces(), invocationHandler);
 
         return null;
     }
