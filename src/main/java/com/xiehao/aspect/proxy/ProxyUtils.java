@@ -16,7 +16,7 @@ public class ProxyUtils {
         return mather.mather(object);
 
     }
-    public static AspectDes convert(Class object){
+    public static AspectDes convert(Class object) throws IllegalAccessException, InstantiationException {
         Map<String ,String> wovenMethods= new HashMap<String,String>();
         AspectDes aspectDes = new AspectDes();
         Method[] methods = object.getMethods();
@@ -47,6 +47,11 @@ public class ProxyUtils {
                     wovenMethods.put(Around.class.getSimpleName(),method.getName());
                 }
 
+            }
+            if(aspectDes.isHasAfter()||aspectDes.isHasAfterReturning()
+                    ||aspectDes.isHasAround()||aspectDes.isHasBefore()){
+                aspectDes.setAspectObj(object.newInstance());
+                aspectDes.setWovenMethods(wovenMethods);
             }
         }
         return aspectDes;

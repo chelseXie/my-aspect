@@ -10,5 +10,5 @@ public interface ProxyFactory {
      * @param <T>
      * @return
      */
-    <T> T getProxyBean(T oject);
+    <T> T getProxyBean(Class<T> oject) throws IllegalAccessException, InstantiationException ;
 }

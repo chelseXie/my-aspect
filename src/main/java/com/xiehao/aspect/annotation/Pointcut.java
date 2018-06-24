@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by next on 2018/6/21.
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Pointcut {
     String value() default "";

@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by next on 2018/6/15.
  */
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface After {
     String value();
